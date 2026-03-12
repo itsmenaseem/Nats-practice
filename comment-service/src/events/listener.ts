@@ -1,6 +1,6 @@
 import { StringCodec } from "nats";
 import { js } from "..";
-
+import { comments } from "../store/comments";
 const sc = StringCodec();
 
 export async function postCreatedListener(){
@@ -19,7 +19,7 @@ export async function postCreatedListener(){
         const data = JSON.parse(
             sc.decode(msg.data)
         );
-
+        comments.push({postId:data.postId,comments:[data.content]});
         console.log("Event received:", data);
 
         msg.ack();

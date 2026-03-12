@@ -7,7 +7,7 @@ const sc = StringCodec()
 app.use(express.json());
 
 let js:JetStreamClient;
-const posts = [];
+const posts:any = [];
 app.post("/api/create",async (req:Request,res:Response)=>{
     const {content} =req.body;
     const postId = randomBytes(4).toString("hex");
@@ -17,6 +17,9 @@ app.post("/api/create",async (req:Request,res:Response)=>{
     return res.send({postId,content});
 })
 
+app.get("/api/posts",(req:Request,res:Response)=>{
+    res.send(posts);
+})
 
 async function runServer(){
     try {
