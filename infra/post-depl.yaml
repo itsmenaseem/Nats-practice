@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: posts
-          image: yourdockerhub/posts:latest
+          image: sidnaseem/nats-post-service:1.1
 
 
 ---
@@ -41,4 +41,4 @@ spec:
     - name: http
       protocol: TCP
       port: 3000
-      targetPort: 3001
+      targetPort: 3000

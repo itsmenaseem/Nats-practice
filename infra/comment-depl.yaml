@@ -19,14 +19,15 @@ spec:
     spec:
       containers:
         - name: comments
-          image: yourdockerhub/comment:latest
+          image: sidnaseem/nats-comment-service:1.4
+          imagePullPolicy: Always
 
 ---
 apiVersion: v1
 kind: Service
 
 metadata:
-  name: post-nodeport-svc
+  name: comment-nodeport-svc
 
 spec:
   type: NodePort
@@ -37,6 +38,8 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 3001
+      targetPort: 3001
 
+#283554a5
+#52c556b9
