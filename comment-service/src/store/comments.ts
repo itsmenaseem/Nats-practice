@@ -1,7 +1,7 @@
 
 interface IComment{
     postId:string,
-    comments:[string]
+    comments:{commentId:string,comment:string}[] 
 }
 
 export const comments:IComment[] = [];

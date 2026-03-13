@@ -1,4 +1,6 @@
 import {AckPolicy, connect} from "nats";
+import {  Streams } from "./definitions/streams";
+import {  Consumers } from "./definitions/consumers";
 
 
 async function init(){
@@ -7,12 +9,12 @@ async function init(){
 
     // create stream (persistance storage) for all event related to post
     await jsm.streams.add({
-        name:"POST",
-        subjects:["post.created"]
+        name:Streams.Post,
+        subjects:["post.*"]
     })
     // create consumer for stream POST
     await jsm.consumers.add("POST",{
-        durable_name:"post-service",
+        durable_name:Consumers.PostService,
         ack_policy:AckPolicy.Explicit,
         filter_subject:"post.*"
     })

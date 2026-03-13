@@ -2,19 +2,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nats-depl
+
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       app: nats
+
   template:
     metadata:
       labels:
         app: nats
+
     spec:
       containers:
         - name: nats
           image: nats:latest
+          args:
+            - "-js"
           ports:
             - containerPort: 4222
 

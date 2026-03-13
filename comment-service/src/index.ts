@@ -1,19 +1,27 @@
 import express, { Request, Response } from "express"
-import {connect, JetStreamClient} from "nats"
+import { JetStreamClient,StringCodec} from "nats"
 import { natsClient } from "./configs/nats.config";
 import { postCreatedListener } from "./events/listener";
 import { comments } from "./store/comments";
+import { Subjects } from "./definitions/subjects";
+import { CommetCreated } from "./definitions/comment.created";
+import {randomBytes}  from "crypto"
 const app = express();
-
+const sc = StringCodec();
 app.use(express.json());
 
 export let js:JetStreamClient;
 
-app.post("/api/create",(req:Request,res:Response)=>{
+app.post("/api/create",async (req:Request,res:Response)=>{
+    const commentId =  randomBytes(4).toString("hex");
    const {postId,content} = req.body;
    const post = comments.find(com=>com.postId == postId);
    if(!post)return res.send("Post not found");
-   post.comments.push(content);
+   const eventPayload:CommetCreated = {
+        postId,commentId,comment:content
+   }
+   js.publish(Subjects.CommentCreated,sc.encode(JSON.stringify(eventPayload)))
+   post.comments.push({commentId,comment:content});
    res.send("Comment created!");
 })
 

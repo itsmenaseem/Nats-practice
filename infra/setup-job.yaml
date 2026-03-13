@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: nats-setup
+
+spec:
+  template:
+    spec:
+      containers:
+        - name: setup
+          image: sidnaseem/nats-setup
+      restartPolicy: Never

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express"
 import {JetStreamClient,StringCodec} from "nats"
 import { natsClient } from "./configs/nats.config";
 import {randomBytes} from "crypto"
+import { PostCreated } from "./definitions/post.created";
 const app = express();
 const sc = StringCodec()
 app.use(express.json());
@@ -12,7 +13,10 @@ app.post("/api/create",async (req:Request,res:Response)=>{
     const {content} =req.body;
     const postId = randomBytes(4).toString("hex");
     posts.push({postId,content});
-    const payload = sc.encode(JSON.stringify({postId,content}));
+    const eventPayload:PostCreated = {
+        postId,content
+    };
+    const payload = sc.encode(JSON.stringify(eventPayload));
     await js.publish("post.created",payload);
     return res.send({postId,content});
 })
